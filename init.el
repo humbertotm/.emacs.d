@@ -1,33 +1,3 @@
-;; TODO: still need to evaluate which of these packages are to be installed/loaded through
-;; use-package
-
-;; List of packages required by my setup
-;; (defconst required-package-list
-;;   (list 'use-package
-;; 	'markdown-mode
-;; 	'lsp-mode
-;; 	'magit
-;; 	'projectile
-;; 	'projectile-rails
-;; 	'go-mode
-;; 	'go-autocomplete
-;; 	'multiple-cursors
-;; 	'slim-mode
-;; 	'robe
-;; 	'company
-;; 	'clojure-mode
-;; 	'cider
-;; 	'which-key
-;; 	'avy
-;; 	'restclient
-;; 	'docker
-;; 	'docker-tramp
-;; 	'dockerfile-mode
-;; 	'docker-compose-mode
-;; 	'exec-path-from-shell
-;; 	'zeno-theme
-;; 	'solarized-theme))
-
 ;; Init custom seupt by installing list of specified packages
 (defun init-setup (packages)
   ;; (package-refresh-contents) 		; How do we refresh conditionally? 
@@ -84,6 +54,18 @@
   :ensure t
   :config
   (load-theme 'zeno t))
+
+(use-package dockerfile-mode
+  :ensure t)
+
+(use-package docker-compose-mode
+  :ensure t)
+
+(use-package markdown-mode
+  :ensure t)
+
+(use-package restclient
+  :ensure t)
 
 ;; Init projectile upon Emacs startup
 (use-package projectile
