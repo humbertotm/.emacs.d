@@ -1,19 +1,9 @@
-;; Init custom seupt by installing list of specified packages
-(defun init-setup (packages)
-  ;; (package-refresh-contents) 		; How do we refresh conditionally? 
-  (if (not (null (car packages)))
-      (progn
-	(unless (package-installed-p (car packages))
-	  (package-install (car packages)))
-	(init-setup (cdr packages)))))
-
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 (package-initialize)
 
-;; [wololo] use-package alternative
 (eval-when-compile
   (require 'use-package))
 
