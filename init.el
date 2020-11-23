@@ -128,37 +128,71 @@
 ;; Go
 ;; TODO: enable Guru. Download is failing. Perhaps requires a more recent version than 1.10
 
-(defun set-exec-path-from-shell-PATH ()
-  (let ((path-from-shell (replace-regexp-in-string
-                          "[ \t\n]*$"
-                          ""
-                          (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
-    (setenv "PATH" path-from-shell)
-    (setq eshell-path-env path-from-shell) ; for eshell users
-    (setq exec-path (split-string path-from-shell path-separator))))
+;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+(setq lsp-keymap-prefix "s-l")
 
-(defun my-go-mode-hook ()
-  ;; Use goimports instead of go-fmt
-  (setq gofmt-command "goimports")
-  ;; Call Gofmt before saving                                                    
-  (add-hook 'before-save-hook 'gofmt-before-save)
-    ;; Godef jump key binding                                                      
-  (local-set-key (kbd "M-.") 'godef-jump)
-  (local-set-key (kbd "M-*") 'pop-tag-mark))
-
-(defun auto-complete-for-go ()
-  (auto-complete-mode 1))
-
-(use-package go-mode
+(use-package lsp-mode
   :ensure t
-  :init
-  (when window-system (set-exec-path-from-shell-PATH))
-  (setenv "GOPATH" "/Users/htellechea/go")
-  (add-to-list 'exec-path "/User/htellechea/go/bin")
-  :hook ((go-mode . my-go-mode-hook)
-	 (go-mode . auto-complete-for-go)))
+  :hook ((go-mode . lsp-deferred)
+	 (lsp-mode . lsp-enable-which-key-integration))
+  :commands (lsp lsp-deferred))
 
-(use-package go-autocomplete
+;; Set up before-save hooks to format buffer and add/delete imports.
+;; Make sure you don't have other gofmt/goimports hooks enabled.
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+(defvar lsp-docker-client-packages
+  '(lsp-clients lsp-go))
+
+(defvar lsp-docker-client-configs
+  (list
+   (list :server-id 'gopls :docker-server-id 'gopls-docker :server-command "gopls")))
+
+(use-package lsp-docker
   :ensure t
-  :after (go-mode))
+  :config
+  (lsp-docker-init-clients
+   :docker-image-id "986043cf156e"
+   :path-mappings '(("/Users/htellechea/p_projects" . "/projects"))
+   :client-packages lsp-docker-client-packages
+   :client-configs lsp-docker-client-configs))
+
+
+;; (defun set-exec-path-from-shell-PATH ()
+;;   (let ((path-from-shell (replace-regexp-in-string
+;;                           "[ \t\n]*$"
+;;                           ""
+;;                           (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+;;     (setenv "PATH" path-from-shell)
+;;     (setq eshell-path-env path-from-shell) ; for eshell users
+;;     (setq exec-path (split-string path-from-shell path-separator))))
+
+;; (defun my-go-mode-hook ()
+;;   ;; Use goimports instead of go-fmt
+;;   (setq gofmt-command "goimports")
+;;   ;; Call Gofmt before saving                                                    
+;;   (add-hook 'before-save-hook 'gofmt-before-save)
+;;     ;; Godef jump key binding                                                      
+;;   (local-set-key (kbd "M-.") 'godef-jump)
+;;   (local-set-key (kbd "M-*") 'pop-tag-mark))
+
+;; (defun auto-complete-for-go ()
+;;   (auto-complete-mode 1))
+
+;; (use-package go-mode
+;;   :ensure t
+;;   :init
+;;   (when window-system (set-exec-path-from-shell-PATH))
+;;   (setenv "GOPATH" "/Users/htellechea/go")
+;;   (add-to-list 'exec-path "/User/htellechea/go/bin")
+;;   :hook ((go-mode . my-go-mode-hook)
+;; 	 (go-mode . auto-complete-for-go)))
+
+;; (use-package go-autocomplete
+;;   :ensure t
+;;   :after (go-mode))
 
