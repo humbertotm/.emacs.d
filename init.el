@@ -34,7 +34,7 @@
  )
 
 ;; Init electric-pair-mode upon Emacs startup
-(electric-pair-mode +1)
+(electric-pair-mode)
 
 ;; Init linecount mode
 (global-display-line-numbers-mode)
@@ -68,7 +68,7 @@
   ;; files with alien
   (setq projectile-indexing-method 'native)
   (setq projectile-enable-caching t)
-  (projectile-mode +1))
+  (projectile-mode))
 
 (use-package magit
   :ensure t)
@@ -77,7 +77,7 @@
   :ensure t
   :config
   (which-key-setup-side-window-right)
-  (which-key-mode +1))
+  (which-key-mode))
 
 (use-package multiple-cursors
   :ensure t
@@ -91,7 +91,7 @@
 (use-package company
   :ensure t
   :config
-  (global-company-mode t))
+  (global-company-mode))
 
 ;; Ruby
 ;; TODO: use projectile-rails to better navigate a rails project
@@ -147,7 +147,7 @@
   (local-set-key (kbd "M-*") 'pop-tag-mark))
 
 (defun auto-complete-for-go ()
-  (auto-complete-mode 1))
+  (auto-complete-mode))
 
 (use-package go-mode
   :ensure t
