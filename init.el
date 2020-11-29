@@ -20,12 +20,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   (quote
-    ("c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358" "a325ba05dc3b5c2fa89af0ff354bbbe90251fb1a6e6d5682977cebe61ce72ab7" "2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" default)))
+   '("c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358" "a325ba05dc3b5c2fa89af0ff354bbbe90251fb1a6e6d5682977cebe61ce72ab7" "2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" default))
  '(max-mini-window-height 10)
  '(package-selected-packages
-   (quote
-    (lsp-ui use-package markdown-mode lsp-mode docker docker-compose-mode dockerfile-mode go-autocomplete exec-path-from-shell restclient elpy solarized-theme zeno-theme ## avy which-key cider clojure-mode company magit multiple-cursors slim-mode projectile-rails go-mode))))
+   '(lsp-mode use-package markdown-mode docker docker-compose-mode dockerfile-mode go-autocomplete exec-path-from-shell restclient elpy solarized-theme zeno-theme ## avy which-key cider clojure-mode company magit multiple-cursors slim-mode projectile-rails go-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -131,12 +129,16 @@
 ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
 (setq lsp-keymap-prefix "s-l")
 
+(use-package exec-path-from-shell
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
 (use-package lsp-mode
   :ensure t
-  :hook ((go-mode . lsp-deferred)
+  :hook ((go-mode . lsp)
 	 (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred))
-
 ;; Set up before-save hooks to format buffer and add/delete imports.
 ;; Make sure you don't have other gofmt/goimports hooks enabled.
 (defun lsp-go-install-save-hooks ()
@@ -145,21 +147,21 @@
 
 (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
-(defvar lsp-docker-client-packages
-  '(lsp-clients lsp-go))
+;; (defvar lsp-docker-client-packages
+;;   '(lsp-clients lsp-go))
 
-(defvar lsp-docker-client-configs
-  (list
-   (list :server-id 'gopls :docker-server-id 'gopls-docker :server-command "gopls")))
+;; (defvar lsp-docker-client-configs
+;;   (list
+;;    (list :server-id 'gopls :docker-server-id 'gopls-docker :server-command "gopls")))
 
-(use-package lsp-docker
-  :ensure t
-  :config
-  (lsp-docker-init-clients
-   :docker-image-id "986043cf156e"
-   :path-mappings '(("/Users/htellechea/p_projects" . "/projects"))
-   :client-packages lsp-docker-client-packages
-   :client-configs lsp-docker-client-configs))
+;; (use-package lsp-docker
+;;   :ensure t
+;;   :config
+;;   (lsp-docker-init-clients
+;;    :docker-image-id "986043cf156e"
+;;    :path-mappings '(("/Users/htellechea/p_projects" . "/projects"))
+;;    :client-packages lsp-docker-client-packages
+;;    :client-configs lsp-docker-client-configs))
 
 
 ;; (defun set-exec-path-from-shell-PATH ()
