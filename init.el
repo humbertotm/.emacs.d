@@ -19,7 +19,7 @@
    '("c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358" "a325ba05dc3b5c2fa89af0ff354bbbe90251fb1a6e6d5682977cebe61ce72ab7" "2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" default))
  '(max-mini-window-height 10)
  '(package-selected-packages
-   '(robe projectile restclient-mode lsp-ui use-package markdown-mode lsp-mode docker docker-compose-mode dockerfile-mode go-autocomplete exec-path-from-shell restclient elpy solarized-theme zeno-theme ## avy which-key cider clojure-mode company magit multiple-cursors slim-mode projectile-rails go-mode)))
+   '(ivy robe projectile restclient-mode lsp-ui use-package markdown-mode lsp-mode docker docker-compose-mode dockerfile-mode go-autocomplete exec-path-from-shell restclient elpy solarized-theme zeno-theme ## avy which-key cider clojure-mode company magit multiple-cursors slim-mode projectile-rails go-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -55,15 +55,21 @@
 ;; Init projectile upon Emacs startup
 (use-package projectile
   :ensure t
-  :bind-keymap
-  ("s-p" . projectile-command-map)
-  :config
+  :init
   ;; native will take into account .projectile files as opposed to alien
   ;; Consider going back to alien. Seems to be faster. Find a way to ignore
   ;; files with alien
   (setq projectile-indexing-method 'native)
   (setq projectile-enable-caching t)
-  (projectile-mode))
+  (projectile-mode +1)
+  :bind (:map projectile-mode-map
+	      ("s-p" . projectile-command-map)))
+
+(use-package ivy
+  :ensure t
+  :config
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-count-format "(%d/%d) "))
 
 (use-package magit
   :ensure t)
