@@ -63,8 +63,7 @@
   (setq projectile-enable-caching t)
   (projectile-mode +1)
   :bind (:map projectile-mode-map
-	      ("s-p" . projectile-command-map)
-	      ("s-p s g" . projectile-grep)))
+	      ("s-p" . projectile-command-map)))
 
 ;; Autocompletion suggestion for project navigation
 (use-package helm-projectile
