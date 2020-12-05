@@ -52,6 +52,11 @@
   :ensure t
   :mode ("\\.http\\'" . restclient-mode))
 
+(use-package exec-path-from-shell
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
 ;; Init projectile upon Emacs startup
 (use-package projectile
   :ensure t
@@ -59,7 +64,7 @@
   ;; native will take into account .projectile files as opposed to alien
   ;; Consider going back to alien. Seems to be faster. Find a way to ignore
   ;; files with alien
-  (setq projectile-indexing-method 'native)
+  (setq projectile-indexing-method 'hybrid)
   (setq projectile-enable-caching t)
   (projectile-mode +1)
   :bind (:map projectile-mode-map
