@@ -66,6 +66,9 @@
   ;; files with alien
   (setq projectile-indexing-method 'hybrid)
   (setq projectile-enable-caching t)
+  (setq projectile-globally-ignored-files '("gin-bin"))
+  (setq projectile-globally-ignored-file-suffixes '(".log" ".out"))
+  (setq projectile-globally-ignored-directories '("mocks" "test-results"))
   (projectile-mode +1)
   :bind (:map projectile-mode-map
 	      ("s-p" . projectile-command-map)))
