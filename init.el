@@ -135,12 +135,6 @@
 ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
 (setq lsp-keymap-prefix "s-l")
 
-;; [wololo] Test this against supported golang version to ensure that it works properly without it
-;; (use-package exec-path-from-shell
-;;   :config
-;;   (when (memq window-system '(mac ns x))
-;;     (exec-path-from-shell-initialize)))
-
 (use-package lsp-mode
   :ensure t
   :config
@@ -172,8 +166,7 @@
   :ensure t
   :init
   (setenv "WORKON_HOME" "~/.virtualenvs")
-  ;; :demand t
   :config
   (setq pyvenv-workon "Dashboard")  ; Default venv for tesorio project
-  (pyvenv-mode t))
+  (pyvenv-tracking-mode t))	    ; Read from active virtualenvs
 
