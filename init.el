@@ -168,7 +168,7 @@
   (yas-global-mode)
   :hook ((go-mode . lsp)
 	 (js-mode . lsp)
-	 ;; (python-mode . lsp) ;; Disabling as it breaks down performace wise with Tesorio Dashboard
+	 (python-mode . lsp) ;; Disabling as it breaks down performace wise with Tesorio Dashboard
 	 (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred))
 
@@ -192,7 +192,7 @@
   (setq pyvenv-workon "Dashboard")  ; Default venv for tesorio project
   (pyvenv-tracking-mode t))	    ; Read from active virtualenvs
 
-(use-package elpy
-  :ensure t
-  :init
-  (elpy-enable))
+;; (use-package elpy
+;;   :ensure t
+;;   :init
+;;   (elpy-enable))
