@@ -163,9 +163,6 @@
 	 (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred))
 
-(with-eval-after-load 'js
-  (define-key js-mode-map (kbd "M-.") nil))
-
 ;; (use-package lsp-python-ms
 ;;   :ensure t
 ;;   :init (setq lsp-python-ms-auto-install-server t)
