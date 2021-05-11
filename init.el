@@ -1,12 +1,3 @@
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
-
-(eval-when-compile
-  (require 'use-package))
-
 (when (>= emacs-major-version 24)
   (require 'package)
   (add-to-list
@@ -14,6 +5,11 @@
    ;; '("melpa" . "http://stable.melpa.org/packages/") ; many packages won't show if using stable
    '("melpa" . "https://melpa.org/packages/")
    t))
+
+(package-initialize)
+
+(eval-when-compile
+  (require 'use-package))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -24,6 +20,7 @@
  '(max-mini-window-height 10)
  '(package-selected-packages
    '(lsp-python-ms pyvenv lsp-mode use-package markdown-mode docker docker-compose-mode dockerfile-mode go-autocomplete exec-path-from-shell restclient elpy solarized-theme zeno-theme ## avy which-key cider clojure-mode company magit multiple-cursors slim-mode projectile-rails go-mode)))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -32,7 +29,7 @@
  )
 
 ;; Init electric-pair-mode upon Emacs startup
-(electric-pair-mode +1)
+(electric-pair-mode)
 
 ;; Init linecount mode
 (global-display-line-numbers-mode)
@@ -63,7 +60,7 @@
   ;; native will take into account .projectile files as opposed to alien
   ;; Consider going back to alien. Seems to be faster. Find a way to ignore
   ;; files with alien
-  (setq projectile-indexing-method 'native)
+  (setq projectile-indexing-method 'hybrid)
   (setq projectile-enable-caching t)
   (projectile-mode +1)
   :bind (:map projectile-mode-map
@@ -82,7 +79,7 @@
   :ensure t
   :config
   (which-key-setup-side-window-right)
-  (which-key-mode +1))
+  (which-key-mode))
 
 (use-package multiple-cursors
   :ensure t
@@ -96,7 +93,7 @@
 (use-package company
   :ensure t
   :config
-  (global-company-mode t))
+  (global-company-mode))
 
 ;; Ruby
 ;; TODO: use projectile-rails to better navigate a rails project
@@ -182,4 +179,3 @@
   :ensure t
   :init
   (elpy-enable))
-
