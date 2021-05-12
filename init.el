@@ -117,18 +117,11 @@
   (eval-after-load 'company
     '(push 'company-robe company-backends)))
 
-<<<<<<< HEAD
 ;; Javascript enhancement
-=======
->>>>>>> d9f43f7 (Added js2 minor mode for enhancement)
 (use-package js2-mode
   :ensure t
   :config
   (setq js2-basic-offset 2))
-<<<<<<< HEAD
-=======
-
->>>>>>> d9f43f7 (Added js2 minor mode for enhancement)
 
 ;; Clojure, CIDER mode enhancing
 (use-package cider
