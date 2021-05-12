@@ -19,7 +19,7 @@
    '("c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358" "a325ba05dc3b5c2fa89af0ff354bbbe90251fb1a6e6d5682977cebe61ce72ab7" "2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" default))
  '(max-mini-window-height 10)
  '(package-selected-packages
-   '(js2-mode js-mode robe helm-projectile projectile lsp-python-ms pyvenv lsp-mode use-package markdown-mode docker docker-compose-mode dockerfile-mode go-autocomplete exec-path-from-shell restclient elpy solarized-theme zeno-theme ## avy which-key cider clojure-mode company magit multiple-cursors slim-mode projectile-rails go-mode)))
+   '(lsp-ui js2-mode js-mode robe helm-projectile projectile lsp-python-ms pyvenv lsp-mode use-package markdown-mode docker docker-compose-mode dockerfile-mode go-autocomplete exec-path-from-shell restclient elpy solarized-theme zeno-theme ## avy which-key cider clojure-mode company magit multiple-cursors slim-mode projectile-rails go-mode)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -148,13 +148,20 @@
   :ensure t
   :config
   ;; Fine tunning LSP configs for better performance
-  (setq gc-cons-threshold (* 100 1024 1024)
+  (setq gc-cons-threshold (* 100 1024 1024) ; Increase this one by a factor of 2 until satisfied
 	read-process-output-max (* 1024 1024)
+	lsp-log-io nil
         lsp-idle-delay 0.500)
   ;; Python specific LSP configs
-  (setq lsp-enable-symbol-highlighting t
+  (setq lsp-enable-symbol-highlighting nil
 	lsp-pyls-plugins-flake8-enabled t
 	lsp-pyls-plugins-yapf-enabled t)
+  ;; Disable real time syntax check
+  (setq lsp-diagnostic-package :none)
+  ;; use ffip instead
+  (setq lsp-enable-links nil)
+  ;; Disable completion
+  (setq lsp-enable-completion-at-point nil)
   (lsp-register-custom-settings
    '(("pyls.plugins.pyls_mypy.enabled" t t)
      ("pyls.plugins.pyls_mypy.live_mode" nil t)
@@ -165,12 +172,26 @@
      ("pyls.plugins.pycodestyle.enabled" nil t)
      ("pyls.plugins.mccabe.enabled" nil t)
      ("pyls.plugins.pyflakes.enabled" nil t)))
+  ;; Still need to debug and ensure this is correctly set up and ignoring these
+  ;; (with-eval-after-load 'lsp-mode
+  ;;   (add-to-list 'lsp-file-watch-ignored-directories ".fonts")
+  ;;   (add-to-list 'lsp-file-watch-ignored-directories "/Users/humberto.tellechea/tesorio/projects/Dashboard/\.log")
+  ;;   (add-to-list 'lsp-file-watch-ignored-directories "/Users/humberto.tellechea/tesorio/projects/Dashboard/media")
+  ;;   ;; or
+  ;;   (add-to-list 'lsp-file-watch-ignored-files "[/\\\\]\\.pyc$'"))
+  (push "/Users/humberto.tellechea/tesorio/projects/Dashboard/\\.log" lsp-file-watch-ignored-directories)
+  (push "/Users/humberto.tellechea/tesorio/projects/Dashboard/\\.fonts" lsp-file-watch-ignored-directories)
+  (push "/Users/humberto.tellechea/tesorio/projects/Dashboard/media" lsp-file-watch-ignored-directories)
+  (push "/Users/humberto.tellechea/tesorio/projects/Dashboard/.*\\.pyc$" lsp-file-watch-ignored) 
   (yas-global-mode)
   :hook ((go-mode . lsp)
 	 (js-mode . lsp)
 	 (python-mode . lsp) ;; Disabling as it breaks down performace wise with Tesorio Dashboard
 	 (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred))
+
+;; (use-package lsp-ui
+;;   :ensure t)
 
 ;; Set up before-save hooks to format buffer and add/delete imports.
 ;; Make sure you don't have other gofmt/goimports hooks enabled.
