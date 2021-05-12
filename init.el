@@ -117,6 +117,11 @@
   (eval-after-load 'company
     '(push 'company-robe company-backends)))
 
+;; Javascript enhancement
+(use-package js2-mode
+  :ensure t
+  :config
+  (setq js2-basic-offset 2))
 
 ;; Clojure, CIDER mode enhancing
 (use-package cider
@@ -167,20 +172,17 @@
 	 (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred))
 
-;; (use-package lsp-python-ms
-;;   :ensure t
-;;   :init (setq lsp-python-ms-auto-install-server t)
-;;   :hook (python-mode . (lambda ()
-;;                          (require 'lsp-python-ms)
-;;                          (lsp))))  ; or lsp-deferred
-
 ;; Set up before-save hooks to format buffer and add/delete imports.
 ;; Make sure you don't have other gofmt/goimports hooks enabled.
 (defun lsp-go-install-save-hooks ()
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
+;; Go mode hooks
 (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+;; js mode hook
+(add-hook 'js-mode-hook 'js2-minor-mode)
 
 (use-package pyvenv
   :ensure t
