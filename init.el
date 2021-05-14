@@ -19,7 +19,7 @@
    '("c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358" "a325ba05dc3b5c2fa89af0ff354bbbe90251fb1a6e6d5682977cebe61ce72ab7" "2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" default))
  '(max-mini-window-height 10)
  '(package-selected-packages
-   '(lsp-ui js2-mode js-mode robe helm-projectile projectile lsp-python-ms pyvenv lsp-mode use-package markdown-mode docker docker-compose-mode dockerfile-mode go-autocomplete exec-path-from-shell restclient elpy solarized-theme zeno-theme ## avy which-key cider clojure-mode company magit multiple-cursors slim-mode projectile-rails go-mode)))
+   '(company-ctags lsp-ui js2-mode js-mode robe helm-projectile projectile lsp-python-ms pyvenv lsp-mode use-package markdown-mode docker docker-compose-mode dockerfile-mode go-autocomplete exec-path-from-shell restclient elpy solarized-theme zeno-theme ## avy which-key cider clojure-mode company magit multiple-cursors slim-mode projectile-rails go-mode)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -167,31 +167,33 @@
      ("pyls.plugins.pyls_mypy.live_mode" nil t)
      ("pyls.plugins.pyls_black.enabled" t t)
      ("pyls.plugins.pyls_isort.enabled" t t)
-
      ;; Disable these as they're duplicated by flake8
      ("pyls.plugins.pycodestyle.enabled" nil t)
      ("pyls.plugins.mccabe.enabled" nil t)
      ("pyls.plugins.pyflakes.enabled" nil t)))
-  ;; Still need to debug and ensure this is correctly set up and ignoring these
-  ;; (with-eval-after-load 'lsp-mode
-  ;;   (add-to-list 'lsp-file-watch-ignored-directories ".fonts")
-  ;;   (add-to-list 'lsp-file-watch-ignored-directories "/Users/humberto.tellechea/tesorio/projects/Dashboard/\.log")
-  ;;   (add-to-list 'lsp-file-watch-ignored-directories "/Users/humberto.tellechea/tesorio/projects/Dashboard/media")
-  ;;   ;; or
-  ;;   (add-to-list 'lsp-file-watch-ignored-files "[/\\\\]\\.pyc$'"))
+  ;; Dirs/files to be ignored by watcher (find a more elegant way to express this)
   (push "/Users/humberto.tellechea/tesorio/projects/Dashboard/\\.log" lsp-file-watch-ignored-directories)
   (push "/Users/humberto.tellechea/tesorio/projects/Dashboard/\\.fonts" lsp-file-watch-ignored-directories)
   (push "/Users/humberto.tellechea/tesorio/projects/Dashboard/media" lsp-file-watch-ignored-directories)
+  (push "/Users/humberto.tellechea/tesorio/projects/.*/node_modules" lsp-file-watch-ignored-directories)
   (push "/Users/humberto.tellechea/tesorio/projects/Dashboard/.*\\.pyc$" lsp-file-watch-ignored) 
   (yas-global-mode)
   :hook ((go-mode . lsp)
 	 (js-mode . lsp)
-	 (python-mode . lsp) ;; Disabling as it breaks down performace wise with Tesorio Dashboard
+	 (python-mode . (lambda ()
+			  (require 'lsp-python-ms)
+			  (lsp)))
 	 (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred))
 
-;; (use-package lsp-ui
-;;   :ensure t)
+;; Using the Microsoft Python Language Server as it is faster
+;; than Palantir's crap
+(use-package lsp-python-ms
+  :ensure t
+  :init (setq lsp-python-ms-auto-install-server t))
+
+(use-package lsp-ui
+  :ensure t)
 
 ;; Set up before-save hooks to format buffer and add/delete imports.
 ;; Make sure you don't have other gofmt/goimports hooks enabled.
@@ -213,7 +215,3 @@
   (setq pyvenv-workon "Dashboard")  ; Default venv for tesorio project
   (pyvenv-tracking-mode t))	    ; Read from active virtualenvs
 
-;; (use-package elpy
-;;   :ensure t
-;;   :init
-;;   (elpy-enable))
