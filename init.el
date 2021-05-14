@@ -60,7 +60,7 @@
   ;; native will take into account .projectile files as opposed to alien
   ;; Consider going back to alien. Seems to be faster. Find a way to ignore
   ;; files with alien
-  (setq projectile-indexing-method 'hybrid)
+  (setq projectile-indexing-method 'alien)
   (setq projectile-enable-caching t)
   (projectile-mode +1)
   :bind (:map projectile-mode-map
