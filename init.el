@@ -126,19 +126,7 @@
 ;; Clojure, CIDER mode enhancing
 (use-package cider
   :ensure t
-  :hook (clojure-mode . cider-mode)
-  :config
-  ;; Setting this to true to enable sshing into remote hosts to establish connection with
-  ;; an nREPL server.
-  ;; Employed to establish connection with running leiningen repl server running inside vm.
-  (setq nrepl-use-ssh-fallback-for-remote-hosts t)
-  ;; Make sure to start lein repl in port 36096 in vagrant vm.
-  ;; Otherwise, will fall back to ask for specifics.
-  ;; TODO: test if removing this affects cider-mode in any way in our current use case.
-  ;; This is specifically for the VM development environment use case.
-  (setq cider-known-endpoints
-	'(("vagrant" "127.0.0.1" "36096")
-	  ("localhost" "127.0.0.1" "36096"))))
+  :hook (clojure-mode . cider-mode))
 
 ;; SQL mode indentation support
 (use-package sql-indent
@@ -180,7 +168,7 @@
   (push "/Users/humberto.tellechea/tesorio/projects/Dashboard/media" lsp-file-watch-ignored-directories)
   (push "/Users/humberto.tellechea/tesorio/projects/.*/node_modules" lsp-file-watch-ignored-directories)
   (push "/Users/humberto.tellechea/tesorio/projects/Dashboard/.*\\.pyc$" lsp-file-watch-ignored) 
-  (yas-global-mode)
+  ;; (yas-global-mode) TODO: disabling for now but should look into it as it seems like a cool tool
   :hook ((go-mode . lsp)
 	 (js-mode . lsp)
 	 (python-mode . (lambda ()
